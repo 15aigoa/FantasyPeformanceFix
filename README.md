@@ -1,4 +1,4 @@
-# FantasyPF (fantasypf)
+# FantasyPF (FantasyPeformancefix)
 
 > **This mod was created with the assistance of [Claude](https://claude.ai) (Anthropic).**
 > このModはAnthropic社のAIモデル「[Claude](https://claude.ai)」の支援を受けて作成されました。
