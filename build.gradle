@@ -1,0 +1,86 @@
+buildscript {
+    repositories {
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+group = mod_group_id
+version = mod_version
+
+base {
+    archivesName = mod_name + "-1.20.1"
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+minecraft {
+    // このMod自体はvanillaクラスのprivateフィールド/メソッドへのアクセスは行わないため
+    // AccessTransformerは使用していない
+    mappings channel: mapping_channel, version: mapping_version
+
+    copyIdeResources = true
+
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+    hotSwap = true
+    dumpTargetOnFailure = true
+    quiet
+}
+
+repositories {
+    flatDir {
+        dir 'libs'
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    // ./libs に配置した Fantasy Ending のjar (EntityASMUtil等の参照 & devランでの動作確認用)
+    // 最終的な成果物jarには同梱されない(implementationで解決されるだけ)。
+    implementation fileTree("libs")
+}
+
+// mods.toml は全て固定値で書いているため(${mod_id}等のGradle置換トークンは未使用)、
+// processResourcesでのテンプレート展開は行っていない。
+// version="${file.jarVersion}" はForge自身がmod読み込み時にjarのマニフェストから解決する。

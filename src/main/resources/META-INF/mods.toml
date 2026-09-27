@@ -1,0 +1,39 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+modId="fantasypf"
+version="${file.jarVersion}"
+displayName="FantasyPF"
+authors="Igoa"
+description='''
+Fantasy Ending の EntityASMUtil#getHealthDelta を、
+delta値が実際に更新された時だけ再取得するようにMixinでキャッシュ化する
+外付けパッチMod。Fantasy Ending本体のコードは書き換えていない。
+'''
+
+[[dependencies.fantasypf]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.fantasypf]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.20.2)"
+    ordering="NONE"
+    side="BOTH"
+
+# Fantasy Endingが入っていない状態でこのパッチだけ入れても意味がない
+# (EntityASMUtilが存在せずクラスロードで落ちる)ので、必須依存として明示している。
+# 手元のjarは 2.7.20 なので下限をそこに合わせているが、
+# 更新した場合はここのversionRangeを調整すること。
+[[dependencies.fantasypf]]
+    modId="fantasy_ending"
+    mandatory=true
+    versionRange="[2.7.20,)"
+    ordering="AFTER"
+    side="BOTH"
