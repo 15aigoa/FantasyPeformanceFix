@@ -1,0 +1,29 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# Forge run/test environment
+run/
+runs/
+logs/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+bin/
+eclipse/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Third-party mod jars placed here for compiling against (see libs/README.md).
+# Not our copyright to redistribute — do not commit.
+libs/*.jar
